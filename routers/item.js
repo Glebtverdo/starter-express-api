@@ -1,7 +1,7 @@
 const Router = require('express');
 const router = new Router();
 const itemController = require("./controllers/itemController");
-const checkAuthicationMiddleware = require('../middleware/CheckAuthicationMiddleware');
+const checkAuthicationMiddleware = require('../middleware/checkAuthicationMiddleware');
 const checkIsAdminMiddleware = require('../middleware/checkIsAdminMiddleware');
 
 router.post("/newitem", checkAuthicationMiddleware, checkIsAdminMiddleware, itemController.create);

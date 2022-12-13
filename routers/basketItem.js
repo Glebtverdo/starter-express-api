@@ -1,5 +1,5 @@
 const Router = require('express');
-const CheckAuthicationMiddleware = require('../middleware/CheckAuthicationMiddleware');
+const CheckAuthicationMiddleware = require('../middleware/checkAuthicationMiddleware');
 const router = new Router();
 const bascketItemController = require("./controllers/bascketItemController");
 

@@ -1,7 +1,7 @@
 const Router = require('express');
 const router = new Router();
 const carController = require("./controllers/carController");
-const checkAuthicationMiddleware = require('../middleware/CheckAuthicationMiddleware');
+const checkAuthicationMiddleware = require('../middleware/checkAuthicationMiddleware');
 const checkIsAdminMiddleware = require('../middleware/checkIsAdminMiddleware');
 
 router.get("/getallitems", carController.getAllItems);
