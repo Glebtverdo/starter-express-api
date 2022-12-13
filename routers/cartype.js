@@ -1,11 +1,11 @@
 const Router = require('express');
 const router = new Router();
 const carTypeController = require("./controllers/carTypeController");
-const checkAuthication = require("../middleware/checkAuthicationMiddleware");
+const checkAuthicationMiddleware = require('../middleware/CheckAuthicationMiddleware');
 const checkIsAdminMiddleware = require('../middleware/checkIsAdminMiddleware');
 
 router.get("/getall", carTypeController.getAllCarTypes);
 router.post("/getallbyid", carTypeController.getCarsByIds);
-router.post("/create", checkAuthication, checkIsAdminMiddleware, carTypeController.create);
+router.post("/create", checkAuthicationMiddleware, checkIsAdminMiddleware, carTypeController.create);
 
 module.exports = router;

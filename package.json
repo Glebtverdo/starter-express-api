@@ -7,7 +7,7 @@
     "node": "14.x"
   },
   "scripts": {
-    "build": "webpack --mode development",
+    "build": "webpack --mode production",
     "start": "node ./dist/server.js"
   },
   "keywords": [],
