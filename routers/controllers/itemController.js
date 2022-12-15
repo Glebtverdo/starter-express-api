@@ -23,8 +23,10 @@ class itemController{
 				Bucket: process.env.BUCKET_NAME,
         Key: "static/" + fileName,
 			})
-			const bucket = await s3.listObjects({Bucket: process.env.BUCKET_NAME})
-			console.log(bucket);
+			await s3.listObjects({Bucket: process.env.BUCKET_NAME}, function(err, data) {
+				if (err) console.log(err, err.stack); // an error occurred
+				else     console.log(data);           // successful response
+			})
 			const ids = JSON.parse(carId)
 			const item = await Item.create({...data, img: fileName, carId: ids});
 			return res.json(item);
