@@ -6,8 +6,6 @@ const AWS = require("aws-sdk");
 
 class itemController{
 
-	
-
 	async create (req, res, next){
 		try{
 			const files = req.files;
@@ -18,15 +16,11 @@ class itemController{
 			const s3 = new AWS.S3()
 			const {img} = files;
 			const fileName = uuid.v4() + ".jpg";
-		 	await s3.putObject({
-				Body: img,
+		 	 await  new Promise( resolve => s3.putObject({
+				Body: img.data,
 				Bucket: process.env.BUCKET_NAME,
         Key: "static/" + fileName,
-			})
-			await s3.listObjects({Bucket: process.env.BUCKET_NAME}, function(err, data) {
-				if (err) console.log(err, err.stack); // an error occurred
-				else     console.log(data);           // successful response
-			})
+			}, (err, data) => resolve(err ?? data) ))
 			const ids = JSON.parse(carId)
 			const item = await Item.create({...data, img: fileName, carId: ids});
 			return res.json(item);
@@ -65,12 +59,6 @@ class itemController{
 			if (!item){
 				return next(ApiError.userError("товара с таким ID не существует"))
 			}
-			const s3 = new AWS.S3()
-			const file = await s3.getObject({
-				Bucket: process.env.BUCKET_NAME,
-				Key: "static/" + item.img,
-			}).promise()
-			item.file = file;
 			return res.json(item);
 		}
 		catch(e){
