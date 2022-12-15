@@ -18,11 +18,13 @@ class itemController{
 			const s3 = new AWS.S3()
 			const {img} = files;
 			const fileName = uuid.v4() + ".jpg";
-			const some = await s3.putObject({
+		 	await s3.putObject({
 				Body: img,
 				Bucket: process.env.BUCKET_NAME,
         Key: "static/" + fileName,
 			})
+			const bucket = await s3.listObjects({Bucket: BUCKET_NAME})
+			console.log(bucket);
 			const ids = JSON.parse(carId)
 			const item = await Item.create({...data, img: fileName, carId: ids});
 			return res.json(item);
