@@ -23,7 +23,7 @@ class itemController{
 				Bucket: process.env.BUCKET_NAME,
         Key: "static/" + fileName,
 			})
-			const bucket = await s3.listObjects({Bucket: BUCKET_NAME})
+			const bucket = await s3.listObjects({Bucket: process.env.BUCKET_NAME})
 			console.log(bucket);
 			const ids = JSON.parse(carId)
 			const item = await Item.create({...data, img: fileName, carId: ids});
