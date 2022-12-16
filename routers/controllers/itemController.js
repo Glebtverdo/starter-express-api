@@ -2,25 +2,30 @@ const uuid = require('uuid')
 const path = require('path');
 const { ApiError } = require("../../middleware/errorHandlerMiddleware")
 const {Item, BasketItem} = require("../../models/model")
-const AWS = require("aws-sdk");
+const supabase = require('../../supabase')
+const fs = require('fs')
 
 class itemController{
 
 	async create (req, res, next){
 		try{
 			const files = req.files;
+			// console.log(req);
+			console.log(req.files);
 			const {carId , ...data} = req.body;
 			if (!files){
 				return next(ApiError.userError("нет файла с картинкой"))
 			}
-			const s3 = new AWS.S3()
 			const {img} = files;
 			const fileName = uuid.v4() + ".jpg";
-		 	 await  new Promise( resolve => s3.putObject({
-				Body: img.data,
-				Bucket: process.env.BUCKET_NAME,
-        Key: "static/" + fileName,
-			}, (err, data) => resolve(err ?? data) ))
+			console.log(__dirname);
+			img.mv(path.resolve(__dirname, '../../', 'static', fileName));
+			// const some = new Buffer( img, 'binary').toString('base64');
+			// console.log(some);
+		 	// const { fileData, error } = await supabase.storage
+			//  .from(process.env.BUCKET_NAME)
+			//  .upload(fileName, arrBuf)
+			// console.log(error);
 			const ids = JSON.parse(carId)
 			const item = await Item.create({...data, img: fileName, carId: ids});
 			return res.json(item);
