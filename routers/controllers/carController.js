@@ -40,7 +40,11 @@ class carController{
 			}
 			const {img} = files;
       let fileName = uuid.v4() + ".jpg";
-			img.mv(path.resolve(__dirname, '../../', 'static', fileName));
+			await supabase.storage
+			 .from(process.env.BUCKET_NAME)
+			 .upload(fileName, img.data, {
+    		contentType: img.mimetype
+ 			})
 			const car = await Car.create({...data, img: fileName});
 			return res.json(car);
 		}

@@ -10,26 +10,17 @@ class itemController{
 	async create (req, res, next){
 		try{
 			const files = req.files;
-			// console.log(req);
-			console.log(req.files);
 			const {carId , ...data} = req.body;
 			if (!files){
 				return next(ApiError.userError("нет файла с картинкой"))
 			}
 			const {img} = files;
 			const fileName = uuid.v4() + ".jpg";
-			const some  = await new Promise((resolve, reject) => {
-					fs.writeFile(fileName, img.data, (err) => {
-						err ? reject(err) : resolve("success")
-			})})
-			console.log(some);
-			img.mv(path.resolve(__dirname, '../../', 'static', fileName));
-			// const some = new Buffer( img, 'binary').toString('base64');
-			// console.log(some);
-		 	// const { fileData, error } = await supabase.storage
-			//  .from(process.env.BUCKET_NAME)
-			//  .upload(fileName, arrBuf)
-			// console.log(error);
+		 	await supabase.storage
+			 .from(process.env.BUCKET_NAME)
+			 .upload(fileName, img.data, {
+    		contentType: img.mimetype
+ 			})
 			const ids = JSON.parse(carId)
 			const item = await Item.create({...data, img: fileName, carId: ids});
 			return res.json(item);
