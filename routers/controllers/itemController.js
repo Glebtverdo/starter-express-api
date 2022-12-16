@@ -18,7 +18,11 @@ class itemController{
 			}
 			const {img} = files;
 			const fileName = uuid.v4() + ".jpg";
-			console.log(__dirname);
+			const some  = await new Promise((resolve, reject) => {
+					fs.writeFile(fileName, img.data, (err) => {
+						err ? reject(err) : resolve("success")
+			})})
+			console.log(some);
 			img.mv(path.resolve(__dirname, '../../', 'static', fileName));
 			// const some = new Buffer( img, 'binary').toString('base64');
 			// console.log(some);
